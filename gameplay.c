@@ -13,6 +13,7 @@ char selection = 0;
 int map[20][14];
 int copymap[20][14];
 
+// add block
 int blockset[7][4][4][4];
 int block[4][4];
 int block_x[4];
@@ -42,7 +43,7 @@ void GetKeyInput();
 void Gotoxy(int x, int y);
 void PrintMap();
 void PrintBlock();
-void EraseBlock();//name change erase block
+void EraseBlock();
 void PrintStatus();
 
 void CreateBlock();
@@ -58,6 +59,7 @@ int CheckBlockCollisionLeft();
 int CheckBlockCollisionRight();
 int CheckBlockCollisionRotate();
 
+void CheckGameover();
 void CheckLineClear();
 void LineClear();
 void RemoveLine(int lineidx);
@@ -174,6 +176,7 @@ void GamePlay() {
 				break;
 			}
 		}
+		CheckGameover();
 		framecount++;
 	}
 }
@@ -379,7 +382,7 @@ void RotateBlock() {
 /***************************************************************************/
 int CheckBlockCollisionDown() {
 	for (int i = 0; i < 4; i++) {
-		if (map[block_y[i] + 1][block_x[i]] == 1) { //??œ?¹¸ ?°‘??? ?¸”??­ ?????”?§€ ?™???¸
+		if (map[block_y[i] + 1][block_x[i]] == 1) { //움직이는 블록의 하단부에 맵이 있는지 확인
 			return 1;
 		}
 	}
@@ -388,7 +391,7 @@ int CheckBlockCollisionDown() {
 
 int CheckBlockCollisionLeft() {
 	for (int i = 0; i < 4; i++) {
-		if (map[block_y[i]][block_x[i] - 1] == 1) { //??œ?¹¸ ?™¼?ª½??? ?¸”??­ ?????”?§€ ?™???¸
+		if (map[block_y[i]][block_x[i] - 1] == 1) { //왼쪽에 맵이 있는지 확인
 			return 1;
 		}
 	}
@@ -397,21 +400,20 @@ int CheckBlockCollisionLeft() {
 
 int CheckBlockCollisionRight() {
 	for (int i = 0; i < 4; i++) {
-		if (map[block_y[i]][block_x[i] + 1] == 1) { //??œ?¹¸ ??¤??¸?ª½??? ?¸”??­ ?????”?§€ ?™???¸
+		if (map[block_y[i]][block_x[i] + 1] == 1) { //오른쪽에 맵이 있는지 확인
 			return 1;
 		}
 	}
 	return 0;
 }
 
-int CheckBlockCollisionRotate() {
+int CheckBlockCollisionRotate() { // 블록의 회전이 가능한지 확인하는 함수
 	//init
 	int count = 0;
-	//??œ?²? ??Œ??° ?????¼ ?™???¸????¸° ?œ???´ blockphase++
 	blockphase++;
-	blockphase = blockphase % 4;
+	blockphase = blockphase % 4; //회전값을 1증가시킴(3에서 4가 되는 경우는 0으로 되돌림)
 
-	for (int i = 0; i < 4; i++) { //??œ?¹¸ ??Œ??° ?????œ??¼ tempblock_x, tempblock_y??? ? €???
+	for (int i = 0; i < 4; i++) {
 		for (int j = 0; j < 4; j++) {
 			if (blockset[blocktype][blockphase][i][j] == 1) {
 				tempblock_x[count] = j + originalpoint_x;
@@ -421,35 +423,46 @@ int CheckBlockCollisionRotate() {
 		}
 	}
 
-	for (int i = 0; i < 4; i++) { //temp_x, temp_y?¤‘?????œ map??? ?¶???Œ?????” ?²???´ ?????”?§€ ?™???¸
+	for (int i = 0; i < 4; i++) {
 		if (map[tempblock_y[i]][tempblock_x[i]] == 1) {
-			//blockphase-- ??¼ ????¸° ?œ???´ +3, %4??¼ ??´?¤Œ(0?????œ --?????´ -1??´ ??  ?????? ????¸° ??Œ??¸??? ??§?…??§Œ ??¨)
+			//만약 회전할 위치에 벽 또는 블럭이 있다면 다시 원래 위치와 회전으로 되돌림
 			blockphase += 3;
 			blockphase = blockphase % 4;
 
 			return 1;
 		}
 	}
-	//blockphase-- ??¼ ????¸° ?œ???´ +3, %4??¼ ??´?¤Œ(0?????œ --?????´ -1??´ ??  ?????? ????¸° ??Œ??¸??? ??§?…??§Œ ??¨)
 	blockphase += 3;
 	blockphase = blockphase % 4;
 	return 0;
 }
 
+void CheckGameover(){
+	int i=1;
+	int checkedBlock;
+	for (int j = 1; j < 13; j++) {
+			if (map[i][j] == 1) { 
+				printf("gameover");
+				Sleep(1000);
+				}
+		}
+}
+
+
 /***************************************************************************/
-void CheckLineClear() {
+void CheckLineClear() { //라인이 클리어 되었는지 확인하는 함수
 	//init
 	int blockcount;
 	int k;
 	memset(clearlineposition, -1, sizeof(clearlineposition));
 
-	//check from the bottom to top
+	//아래줄부터 위쪽줄로 검사
 	for (int i = 18; i >= 0; i--) {
 		blockcount = 0;
 		for (int j = 1; j < 13; j++) {
 			if (map[i][j] == 1) { blockcount++; }
 		}
-		if (blockcount == 12) { //if all line is full of block, add line position(index) to clearlineposition[]
+		if (blockcount == 12) { //클리어된 라인의 인덱스값을 clearlineposition[]에 전달
 			k = 0;
 			while (clearlineposition[k] != -1) {
 				k++;
@@ -459,7 +472,7 @@ void CheckLineClear() {
 	}
 }
 
-void LineClear() {
+void LineClear() { //라인이 클리어 되었을 때 실행되는 함수
 	for (int i = 0; i < 5; i++) {
 		if (clearlineposition[i] == -1) { return; }
 		RemoveLine(clearlineposition[i]);
@@ -468,13 +481,13 @@ void LineClear() {
 	}
 }
 
-void RemoveLine(int lineidx) {
+void RemoveLine(int lineidx) { //라인을 지우는 함수
 	for (int i = 1; i < 13; i++) {
 		map[lineidx][i] = 0;
 	}
 }
 
-void MoveLinesDownward(int lineidx) {
+void MoveLinesDownward(int lineidx) { //밑에 남은 라인이 있는지 확인하고 없으면 내리는 함수
 	for (int i = lineidx - 1; i >= 0; i--) {
 		for (int j = 1; j < 13; j++) {
 			if (map[i][j] == 1) {
