@@ -5,6 +5,9 @@
 #include<windows.h>
 #include<conio.h>
 
+#define false 0
+#define true 1
+
 //Global Variables Declaration
 char selection = 0;
 int map[20][14];
@@ -85,7 +88,7 @@ void HideCursor() {
 	info.dwSize = 100;
 	info.bVisible = FALSE;
 	SetConsoleCursorInfo(consoleHandle, &info);
-}
+} //Ä¿¼­¸¦ ¼û±â´Â ÇÔ¼ö
 
 void StartScreen() {
 	printf("####################\n");
@@ -376,7 +379,7 @@ void RotateBlock() {
 /***************************************************************************/
 int CheckBlockCollisionDown() {
 	for (int i = 0; i < 4; i++) {
-		if (map[block_y[i] + 1][block_x[i]] == 1) { //Ã­â€¢Å“Ã¬Â¹Â¸ Ã«Â°â€˜Ã¬â€”Â Ã«Â¸â€Ã«Å¸Â­ Ã¬Å¾Ë†Ã«Å â€Ã¬Â§â‚¬ Ã­â„¢â€¢Ã¬ÂÂ¸
+		if (map[block_y[i] + 1][block_x[i]] == 1) { //??©«?©ö¢¬ ?¡Æ¡®??? ?¢¬¡±??¡© ?????¡±?¡×¢æ ?¢â???¢¬
 			return 1;
 		}
 	}
@@ -385,7 +388,7 @@ int CheckBlockCollisionDown() {
 
 int CheckBlockCollisionLeft() {
 	for (int i = 0; i < 4; i++) {
-		if (map[block_y[i]][block_x[i] - 1] == 1) { //Ã­â€¢Å“Ã¬Â¹Â¸ Ã¬â„¢Â¼Ã¬ÂªÂ½Ã¬â€”Â Ã«Â¸â€Ã«Å¸Â­ Ã¬Å¾Ë†Ã«Å â€Ã¬Â§â‚¬ Ã­â„¢â€¢Ã¬ÂÂ¸
+		if (map[block_y[i]][block_x[i] - 1] == 1) { //??©«?©ö¢¬ ?¢â¨ù?¨£¨ö??? ?¢¬¡±??¡© ?????¡±?¡×¢æ ?¢â???¢¬
 			return 1;
 		}
 	}
@@ -394,7 +397,7 @@ int CheckBlockCollisionLeft() {
 
 int CheckBlockCollisionRight() {
 	for (int i = 0; i < 4; i++) {
-		if (map[block_y[i]][block_x[i] + 1] == 1) { //Ã­â€¢Å“Ã¬Â¹Â¸ Ã¬ËœÂ¤Ã«Â¥Â¸Ã¬ÂªÂ½Ã¬â€”Â Ã«Â¸â€Ã«Å¸Â­ Ã¬Å¾Ë†Ã«Å â€Ã¬Â§â‚¬ Ã­â„¢â€¢Ã¬ÂÂ¸
+		if (map[block_y[i]][block_x[i] + 1] == 1) { //??©«?©ö¢¬ ??¢´??¢¬?¨£¨ö??? ?¢¬¡±??¡© ?????¡±?¡×¢æ ?¢â???¢¬
 			return 1;
 		}
 	}
@@ -404,11 +407,11 @@ int CheckBlockCollisionRight() {
 int CheckBlockCollisionRotate() {
 	//init
 	int count = 0;
-	//Ã­â€¢Å“Ã«Â²Ë† Ã«ÂÅ’Ã«Â¦Â° Ã­â€ºâ€žÃ«Â¥Â¼ Ã­â„¢â€¢Ã¬ÂÂ¸Ã­â€¢ËœÃªÂ¸Â° Ã¬Å“â€žÃ­â€¢Â´ blockphase++
+	//??©«?©÷? ??¨«??¡Æ ?????¨ù ?¢â???¢¬????¢¬¡Æ ?©«???¢¥ blockphase++
 	blockphase++;
 	blockphase = blockphase % 4;
 
-	for (int i = 0; i < 4; i++) { //Ã­â€¢Å“Ã¬Â¹Â¸ Ã«ÂÅ’Ã«Â¦Â° Ã¬Æ’ÂÃ­Æ’Å“Ã«Â¥Â¼ tempblock_x, tempblock_yÃ¬â€”Â Ã¬ â‚¬Ã¬Å¾Â¥
+	for (int i = 0; i < 4; i++) { //??©«?©ö¢¬ ??¨«??¡Æ ?????©«??¨ù tempblock_x, tempblock_y??? ? ¢æ???
 		for (int j = 0; j < 4; j++) {
 			if (blockset[blocktype][blockphase][i][j] == 1) {
 				tempblock_x[count] = j + originalpoint_x;
@@ -418,16 +421,16 @@ int CheckBlockCollisionRotate() {
 		}
 	}
 
-	for (int i = 0; i < 4; i++) { //temp_x, temp_yÃ¬Â¤â€˜Ã¬â€”ÂÃ¬â€žÅ“ mapÃ¬â€”Â Ã¬Â¶Â©Ã«ÂÅ’Ã­â€¢ËœÃ«Å â€ ÃªÂ²Æ’Ã¬ÂÂ´ Ã¬Å¾Ë†Ã«Å â€Ã¬Â§â‚¬ Ã­â„¢â€¢Ã¬ÂÂ¸
+	for (int i = 0; i < 4; i++) { //temp_x, temp_y?¢´¡®?????©« map??? ?¢Ò???¨«?????¡± ?©÷???¢¥ ?????¡±?¡×¢æ ?¢â???¢¬
 		if (map[tempblock_y[i]][tempblock_x[i]] == 1) {
-			//blockphase-- Ã«Â¥Â¼ Ã­â€¢ËœÃªÂ¸Â° Ã¬Å“â€žÃ­â€¢Â´ +3, %4Ã«Â¥Â¼ Ã­â€¢Â´Ã¬Â¤Å’(0Ã¬â€”ÂÃ¬â€žÅ“ --Ã­â€¢ËœÃ«Â©Â´ -1Ã¬ÂÂ´ Ã«Â  Ã¬Ë†ËœÃ«Ââ€ž Ã¬Å¾Ë†ÃªÂ¸Â° Ã«â€¢Å’Ã«Â¬Â¸Ã¬â€”Â Ã«ÂÂ§Ã¬â€¦Ë†Ã«Â§Å’ Ã­â€¢Â¨)
+			//blockphase-- ??¨ù ????¢¬¡Æ ?©«???¢¥ +3, %4??¨ù ??¢¥?¢´¨«(0?????©« --?????¢¥ -1??¢¥ ??  ?????? ????¢¬¡Æ ??¨«??¢¬??? ??¡×?¡¦??¡×¨« ??¡§)
 			blockphase += 3;
 			blockphase = blockphase % 4;
 
 			return 1;
 		}
 	}
-	//blockphase-- Ã«Â¥Â¼ Ã­â€¢ËœÃªÂ¸Â° Ã¬Å“â€žÃ­â€¢Â´ +3, %4Ã«Â¥Â¼ Ã­â€¢Â´Ã¬Â¤Å’(0Ã¬â€”ÂÃ¬â€žÅ“ --Ã­â€¢ËœÃ«Â©Â´ -1Ã¬ÂÂ´ Ã«Â  Ã¬Ë†ËœÃ«Ââ€ž Ã¬Å¾Ë†ÃªÂ¸Â° Ã«â€¢Å’Ã«Â¬Â¸Ã¬â€”Â Ã«ÂÂ§Ã¬â€¦Ë†Ã«Â§Å’ Ã­â€¢Â¨)
+	//blockphase-- ??¨ù ????¢¬¡Æ ?©«???¢¥ +3, %4??¨ù ??¢¥?¢´¨«(0?????©« --?????¢¥ -1??¢¥ ??  ?????? ????¢¬¡Æ ??¨«??¢¬??? ??¡×?¡¦??¡×¨« ??¡§)
 	blockphase += 3;
 	blockphase = blockphase % 4;
 	return 0;
