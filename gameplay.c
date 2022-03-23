@@ -151,7 +151,6 @@ void GamePlay() {
 				BlockMoveDown();
 			}
 			else {
-				score++;
 				EraseBlock();
 				AddBlocktoMap();
 				CheckLineClear();
@@ -198,7 +197,17 @@ void GetKeyInput() {
 			BlockMoveLeft();
 			break;
 		}
+		case 'J': {
+			if (CheckBlockCollisionLeft()) { break; }
+			BlockMoveLeft();
+			break;
+		}
 		case 'l': {
+			if (CheckBlockCollisionRight()) { break; }
+			BlockMoveRight();
+			break;
+		}
+		case 'L': {
 			if (CheckBlockCollisionRight()) { break; }
 			BlockMoveRight();
 			break;
@@ -437,13 +446,35 @@ int CheckBlockCollisionRotate() { // 블록의 회전이 가능한지 확인하는 함수
 	return 0;
 }
 
-void CheckGameover(){
+void CheckGameover(){ 
 	int i=1;
-	int checkedBlock;
-	for (int j = 1; j < 13; j++) {
+	for (int j = 1; j < 13; j++) { //위에서 첫번째 줄에 놓여진 블럭이 있는지 체크
 			if (map[i][j] == 1) { 
-				printf("gameover");
+				system("cls"); //놓인 블럭이 있다면 전부 지우고 게임오버 화면 표시
+				printf("####################\n");
+				Sleep(100);
+				printf("#      G A M E     #\n");
+				printf("#                  #\n");
+				Sleep(100);
+				printf("#         o        #\n");
+				printf("#         V        #\n");
+				Sleep(200);
+				printf("#         E        #\n");
+				Sleep(300);
+				printf("#         R        #\n");
+				Sleep(100);
+				printf("#                  #\n");
+				printf("#                  #\n");
+				Sleep(100);
+				printf("#                  #\n");
+				printf("#                  #\n");
+				Sleep(100);
+				printf("#                  #\n");
+				printf("#                  #\n");
+				Sleep(100);
+				printf("####################");
 				Sleep(1000);
+				exit(0);
 				}
 		}
 }
