@@ -464,7 +464,7 @@ void CheckGameover(){
 				printf("#                  #\n");
 				printf("#                  #\n");
 				Sleep(100);
-				printf("#                  #\n");
+				printf("#      %d       #\n"score);
 				printf("#                  #\n");
 				Sleep(100);
 				printf("#                  #\n");
