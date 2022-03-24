@@ -2,11 +2,8 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<time.h>
-#include<windows.h>
-#include<conio.h>
-
-#define false 0
-#define true 1
+#include<windows.h> //mac에선 없는 헤더파일
+#include<conio.h> //mac에선 없는 헤더파일
 
 //Global Variables Declaration
 char selection = 0;
@@ -15,18 +12,19 @@ int copymap[20][14];
 
 // add block
 int blockset[7][4][4][4];
-int block[4][4];
+int block[4][4]; //떨어지는 블록의 좌표
 int block_x[4];
 int block_y[4];
 int blocktype = 0;
 int blockphase = 0;
 
+// 블럭의 회전에서 필요한 함수 >> 지역변수로 대체해야 함!
 int originalpoint_x = 0;
 int originalpoint_y = 0;
 int tempblock_x[4];
 int tempblock_y[4];
 
-int templines[19][12];
+int templines[19][12]; //쓰지 않는 배열임
 int clearlineposition[5];
 
 int score = 0;
@@ -59,7 +57,7 @@ int CheckBlockCollisionLeft();
 int CheckBlockCollisionRight();
 int CheckBlockCollisionRotate();
 
-void CheckGameover();
+void CheckGameover(); //아직 덜 만든 함수!
 void CheckLineClear();
 void LineClear();
 void RemoveLine(int lineidx);
